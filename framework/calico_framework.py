@@ -430,15 +430,14 @@ class TestScheduler(mesos.interface.Scheduler):
             driver.abort()
             return
 
+        _log.info("TASK_UPDATE - %s: %s",
+                  mesos_pb2.TaskState.Name(calico_task.state),
+                  calico_task)
+
         try:
             calico_task.process_update(update)
         except TaskUpdateError as e:
             self.kill_test(calico_task.test, str(e))
-
-
-        _log.info("TASK_UPDATE - %s: %s",
-                  mesos_pb2.TaskState.Name(calico_task.state),
-                  calico_task)
 
         if calico_task.state in BAD_TASK_STATES:
             _log.error(
@@ -575,6 +574,7 @@ def start(tests):
 
     scheduler = TestScheduler(0)
     scheduler.tests = tests
+
     _log.info("Launching")
 
     global driver

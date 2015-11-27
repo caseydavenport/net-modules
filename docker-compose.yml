@@ -3,7 +3,7 @@ zookeeper:
   hostname: zookeeper
 
 mesosmaster:
-  image: djosborne/mesos-modules-dev:0.26.0
+  image: djosborne/mesos-modules-dev:master
   hostname: mesosmaster
   command: /mesos/build/bin/mesos-master.sh
   environment:
@@ -29,31 +29,6 @@ proxy:
   ports:
     - "9001:9001"
 
-slavepublic:
-  build: .
-  privileged: true
-  links:
-    - mesosmaster
-    - zookeeper
-    - etcd
-  volumes:
-    - /var/log/mesos:/var/log/mesos
-    - ./framework:/framework
-  environment:
-    - MESOS_MASTER=zk://zookeeper:2181/mesos
-    - MESOS_EXECUTOR_REGISTRATION_TIMEOUT=5mins
-    - MESOS_CONTAINERIZERS=mesos
-    - MESOS_ISOLATOR=cgroups/cpu,cgroups/mem
-    - MESOS_LOG_DIR=/var/log
-    - MESOS_RESOURCES=ports:[9000-31100]
-    - MESOS_DEFAULT_ROLE=public
-    - MESOS_MODULES=file:///calico/modules.json
-    - MESOS_ISOLATION=com_mesosphere_mesos_NetworkIsolator
-    - MESOS_HOOKS=com_mesosphere_mesos_NetworkHook
-    - ETCD_AUTHORITY=etcd:4001
-  dns:
-   - 192.168.255.254
-
 slave:
   build: .
   privileged: true
@@ -64,15 +39,21 @@ slave:
   volumes:
     - /var/log/mesos:/var/log/mesos
     - ./framework:/framework
+    - ./docker-images:/tmp/docker-images
+    # - ./certs:/certs
+
   environment:
     - MESOS_MASTER=zk://zookeeper:2181/mesos
-    - MESOS_EXECUTOR_REGISTRATION_TIMEOUT=5mins
-    - MESOS_CONTAINERIZERS=mesos
-    - MESOS_ISOLATOR=cgroups/cpu,cgroups/mem
     - MESOS_LOG_DIR=/var/log
-    - MESOS_RESOURCES=ports(*):[30000-31100]
+    - MESOS_IMAGE_PROVIDERS=docker
+    - MESOS_DOCKER_LOCAL_ARCHIVES_DIR=/tmp/docker-images
+    - MESOS_IMAGE_PROVISIONER_BACKEND=copy
+    # - SSL_ENABLED=true
+    # - SSL_KEY_FILE=/certs/key.pem
+    # - SSL_CERT_FILE=/certs/cert.pem
+    # - MESOS_DOCKER_PULLER=local
     - MESOS_MODULES=file:///calico/modules.json
-    - MESOS_ISOLATION=com_mesosphere_mesos_NetworkIsolator
+    - MESOS_ISOLATION=com_mesosphere_mesos_NetworkIsolator,filesystem/linux
     - MESOS_HOOKS=com_mesosphere_mesos_NetworkHook
     - ETCD_AUTHORITY=etcd:4001
   dns:

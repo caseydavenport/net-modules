@@ -15,7 +15,11 @@ calico/calico-node-$(CALICO_NODE_VERSION).tar:
 	docker pull calico/node:$(CALICO_NODE_VERSION)
 	docker save -o calico/calico-node-$(CALICO_NODE_VERSION).tar calico/node:$(CALICO_NODE_VERSION)
 
-images: calico-node docker-compose
+docker-images:
+	docker pull ubuntu:14.04
+	docker save -o docker-images/ubuntu:14.04.tar ubuntu:14.04
+
+images: calico-node docker-compose docker-images
 	  ./docker-compose pull
 	  ./docker-compose build
 
@@ -33,6 +37,10 @@ cluster: images
 framework: cluster
 	sleep 20
 	docker exec netmodules_mesosmaster_1 python /framework/test_calico_mesos.py
+
+universal-containerizer-test: cluster
+	sleep 20
+	docker exec netmodules_mesosmaster_1 python /framework/test_universal_containerizer.py
 
 builder-rpm:
 	cd $(WD)/packages && docker build -t mesos-builder .

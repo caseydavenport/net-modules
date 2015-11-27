@@ -34,3 +34,7 @@ docker-compose
 
 # RPMs
 packages/rpms
+
+# Skip any docker images
+docker-images/*
+
