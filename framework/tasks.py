@@ -1,7 +1,4 @@
-import mesos.interface
 from mesos.interface import mesos_pb2
-import mesos.native
-from constants import BAD_TASK_STATES, UNFINISHED_TASK_STATES
 from constants import TASK_CPUS, TASK_MEM
 
 
@@ -390,27 +387,58 @@ class DockerSleepTask(SleepTask):
         task.container.type = mesos_pb2.ContainerInfo.MESOS
         task.container.mesos.image.type = mesos_pb2.Image.DOCKER
         task.container.mesos.image.docker.name = "ubuntu:14.04"
-        task.command.value = "ifconfig"
-        # commandinfo?
-        # executorinfo?
+        task.command.value = "ifconfig && sleep 25"
 
-        #dockerinfo in the containerinfo in the executorinfo
-        # task.executor.container.type = mesos_pb2.ContainerInfo.MESOS
+        network_info = task.container.network_infos.add()
+
+        for netgroup in self.netgroups:
+            network_info.groups.append(netgroup)
+
+        for ip in self.requested_ips:
+            network_info.ip_addresses.add().ip_address = ip
+
+        for _ in range(self.auto_ipv4):
+            network_info.ip_addresses.add().protocol = \
+                mesos_pb2.NetworkInfo.IPv4
+        for _ in range(self.auto_ipv6):
+            network_info.ip_addresses.add().protocol = \
+                mesos_pb2.NetworkInfo.IPv4
+
+        return task
 
 
-        # task.executor.executor_id.value = "test1"
-        #
-        # task.executor.container.docker.image = "hello-world"
-        # # task.executor.container.image = "hello-world"
-        # task.executor.container.mesos.image.type = mesos_pb2.Image.DOCKER
-        # task.executor.command.value = "echo hi"
+class DockerPingTask(PingTask):
+    def as_new_mesos_task(self):
+        """
+        Take the information stored in this Task object and fill a
+        mesos task.
+        """
+        assert self.task_id, "Calico task must be assigned a task_id"
+        assert self.slave_id, "Calico task must be assigned a slave_id"
 
+        task = mesos_pb2.TaskInfo()
+        task.name = repr(self)
+        task.task_id.value = self.task_id
+        task.slave_id.value = self.slave_id
 
-        # NOTE: MesosContainerizer does currently not support this.
-        # Tasks supplying a "container" will fail
-        # task.command.container.image = "hello-world"
+        cpus = task.resources.add()
+        cpus.name = "cpus"
+        cpus.type = mesos_pb2.Value.SCALAR
+        cpus.scalar.value = TASK_CPUS
 
-        # task.container.mesos.image.docker.name = "hello-world"
+        mem = task.resources.add()
+        mem.name = "mem"
+        mem.type = mesos_pb2.Value.SCALAR
+        mem.scalar.value = TASK_MEM
+
+        task.container.type = mesos_pb2.ContainerInfo.MESOS
+        task.container.mesos.image.type = mesos_pb2.Image.DOCKER
+        task.container.mesos.image.docker.name = "ubuntu:14.04"
+
+        ping_ips = []
+        for target in self.can_ping_targets:
+            ping_ips.extend(target.ip_addresses)
+        task.command.value = "ifconfig && " + " && ".join(["ping -c 1 %s" % ip for ip in ping_ips])
 
         network_info = task.container.network_infos.add()
 
