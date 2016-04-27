@@ -68,8 +68,7 @@ RUN ./bootstrap && \
 # Calico
 ######################
 COPY ./calico/ /calico/
-ADD https://github.com/projectcalico/calico-docker/releases/download/v0.16.1/calicoctl /usr/local/bin/calicoctl 
+ADD https://github.com/projectcalico/calico-docker/releases/download/v0.19.0/calicoctl /usr/local/bin/calicoctl 
 RUN chmod +x /usr/local/bin/calicoctl
-
-ADD https://github.com/projectcalico/calico-mesos/releases/download/v0.1.5/calico_mesos /calico/calico_mesos
+ADD https://github.com/projectcalico/calico-mesos/releases/download/v0.1.6/calico_mesos /calico/calico_mesos
 RUN chmod +x /calico/calico_mesos
