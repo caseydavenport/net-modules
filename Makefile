@@ -1,4 +1,3 @@
-.PHONY: framework
 CALICO_NODE_VERSION=v0.19.0
 DOCKER_COMPOSE_URL=https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m`
 
@@ -21,10 +20,6 @@ images: calico-node docker-compose
 clean:
 	./docker-compose kill
 	./docker-compose rm --force
-	rm -rf build
-
-st: clean images
-	test/run_compose_st.sh
 
 cluster: images
 	./docker-compose up -d
@@ -32,16 +27,3 @@ cluster: images
 
 test-cni:
 	docker exec netmodules_slave_1 mesos-execute --containerizer=mesos --docker_image=busybox --name=cni --master=172.17.0.4:5050 --networks=calico-net-1 --command=ifconfig
-
-framework: cluster
-	sleep 20
-	docker exec netmodules_mesosmaster_1 python /framework/calico_framework.py
-
-rpm: dist/mesos.rpm
-dist/mesos.rpm: $(wildcard packages/*)
-	rm -rf build
-	mkdir -p build
-	docker build -t mesos-builder ./packages
-	docker run \
-	-v `pwd`/build/:/root/rpmbuild/RPMS/x86_64/ \
-	-v `pwd`/isolator:/tmp/isolator:ro mesos-builder
