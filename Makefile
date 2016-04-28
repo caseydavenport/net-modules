@@ -30,6 +30,9 @@ cluster: images
 	./docker-compose up -d
 	./docker-compose scale slave=3
 
+test-cni:
+	docker exec netmodules_slave_1 mesos-execute --containerizer=mesos --docker_image=busybox --name=cni --master=172.17.0.4:5050 --networks=calico-net-1 --command=ifconfig
+
 framework: cluster
 	sleep 20
 	docker exec netmodules_mesosmaster_1 python /framework/calico_framework.py

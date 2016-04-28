@@ -3,7 +3,7 @@ zookeeper:
   hostname: zookeeper
 
 mesosmaster:
-  image: mesosphere/mesos-modules-dev:0.27.1
+  image: djosborne/mesos-modules-dev:master
   hostname: mesosmaster
   command: /mesos/build/bin/mesos-master.sh
   environment:
@@ -37,7 +37,6 @@ slave:
     - MESOS_ISOLATOR=cgroups/cpu,cgroups/mem
     - MESOS_LOG_DIR=/var/log
     - MESOS_RESOURCES=ports(*):[9000-31100]
-    - ETCD_AUTHORITY=etcd:4001
     - MESOS_NETWORK_CNI_PLUGINS_DIR=/cni/bin/
     - MESOS_NETWORK_CNI_CONFIG_DIR=/cni/conf/
     - MESOS_ISOLATION=filesystem/linux,docker/runtime
