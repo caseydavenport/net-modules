@@ -37,10 +37,11 @@ slave:
     - MESOS_ISOLATOR=cgroups/cpu,cgroups/mem
     - MESOS_LOG_DIR=/var/log
     - MESOS_RESOURCES=ports(*):[9000-31100]
-    - MESOS_MODULES=file:///calico/modules.json
-    - MESOS_ISOLATION=com_mesosphere_mesos_NetworkIsolator
-    - MESOS_HOOKS=com_mesosphere_mesos_NetworkHook
     - ETCD_AUTHORITY=etcd:4001
+    - MESOS_NETWORK_CNI_PLUGINS_DIR=/cni/bin/
+    - MESOS_NETWORK_CNI_CONFIG_DIR=/cni/conf/
+    - MESOS_ISOLATION=filesystem/linux,docker/runtime
+    - MESOS_IMAGE_PROVIDERS=docker
   dns:
    - 192.168.255.254
 

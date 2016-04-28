@@ -1,4 +1,4 @@
-FROM mesosphere/mesos-modules-dev-phusion:0.27.1
+FROM djosborne/mesos-modules-dev-phusion:master
 MAINTAINER Dan Osborne <dan@projectcalico.org>
 
 ####################
@@ -54,5 +54,6 @@ ADD ./init_scripts/etc/config/mesos-dns.json /etc/config/mesos-dns.json
 COPY ./calico/ /calico/
 ADD https://github.com/projectcalico/calico-docker/releases/download/v0.19.0/calicoctl /usr/local/bin/calicoctl 
 RUN chmod +x /usr/local/bin/calicoctl
-ADD https://github.com/projectcalico/calico-mesos/releases/download/v0.1.6/calico_mesos /calico/calico_mesos
-RUN chmod +x /calico/calico_mesos
+
+
+ADD ./cni/ /cni/
