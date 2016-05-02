@@ -59,7 +59,7 @@ RUN git log -n 1
 RUN ./bootstrap
 
 # Configure
-RUN mkdir build && cd build && ../configure --disable-java --disable-optimize --without-included-zookeeper --with-glog=/usr/local --with-protobuf=/usr --with-boost=/usr/local
+RUN mkdir build && cd build && ../configure --disable-java --disable-optimize --without-included-zookeeper
 
 # Build Mesos
 RUN cd build && make -j 4 install
