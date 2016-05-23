@@ -1,0 +1,14 @@
+[
+  {
+    "id": "B",
+    "url": "http://backend.star-iso.marathon.mesos:9000/status"
+  },
+  {
+    "id": "F",
+    "url": "http://frontend.star-iso.marathon.mesos:9000/status"
+  },
+  {
+    "id": "LB",
+    "url": "http://load-balancer.star-iso.marathon.mesos:9000/status"
+  }
+]
