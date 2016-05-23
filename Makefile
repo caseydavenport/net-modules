@@ -23,7 +23,7 @@ clean:
 
 cluster: images
 	./docker-compose up -d
-	./docker-compose scale slave=3
+	./docker-compose scale slave=2
 
 test-cni:
 	docker exec netmodules_slave_1 mesos-execute --containerizer=mesos --docker_image=busybox --name=cni --master=172.17.0.4:5050 --networks=calico-net-1 --command=ifconfig

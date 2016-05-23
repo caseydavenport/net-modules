@@ -1,0 +1,6 @@
+FROM djosborne/mesos-modules-dev-phusion:master
+
+RUN git remote add djosborne https://github.com/djosborne/mesos.git
+RUN git fetch djosborne
+RUN git checkout djosborne/cni-labels
+RUN cd build && make -j 4 install

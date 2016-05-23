@@ -1,4 +1,4 @@
-FROM djosborne/mesos-modules-dev-phusion:master
+FROM djosborne/mesos-modules-dev-phusion:cni
 MAINTAINER Dan Osborne <dan@projectcalico.org>
 
 ####################
