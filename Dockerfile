@@ -1,13 +1,6 @@
 FROM djosborne/mesos-modules-dev-phusion:cni
 MAINTAINER Dan Osborne <dan@projectcalico.org>
 
-####################
-# Mesos-DNS
-####################
-RUN curl -LO https://github.com/mesosphere/mesos-dns/releases/download/v0.5.0/mesos-dns-v0.5.0-linux-amd64 && \
-    mv mesos-dns-v0.5.0-linux-amd64 /usr/bin/mesos-dns && \
-    chmod +x /usr/bin/mesos-dns
-
 ###################
 # Docker
 ###################
@@ -23,6 +16,25 @@ RUN curl -sSL https://get.docker.com/ | sh
 
 # Define additional metadata for our image.
 VOLUME /var/lib/docker
+
+
+####################
+# Mesos-DNS
+####################
+RUN curl -LO https://github.com/mesosphere/mesos-dns/releases/download/v0.5.0/mesos-dns-v0.5.0-linux-amd64 && \
+    mv mesos-dns-v0.5.0-linux-amd64 /usr/bin/mesos-dns && \
+    chmod +x /usr/bin/mesos-dns
+
+####################
+# Demo Files
+####################
+WORKDIR /star
+ADD http://downloads.mesosphere.io/demo/star/v0.5.0/star-collect-v0.5.0-linux-x86_64 /star/
+RUN chmod +x star-collect-v0.5.0-linux-x86_64 
+ADD http://downloads.mesosphere.io/demo/star/v0.5.0/star-probe-v0.5.0-linux-x86_64 /star/
+RUN chmod +x star-probe-v0.5.0-linux-x86_64 
+
+COPY ./demo/star-resources.json /star/star-resources.json               
 
 #################
 # Init scripts
