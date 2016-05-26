@@ -12,18 +12,14 @@ run "docker exec netmodules_client_1 docker run --rm redis:alpine redis-cli -h r
 
 desc "This is bad news, so lets add some policy"
 
-desc "Policy for redis access (from frontend only)"
+desc "Let's define a policy that only allows redis to accept inbound connections from the frontend"
 run "cat $(relative redis-policy.yaml)"
 run "./calicoctl create --filename=./redis-policy.yaml"
 
-desc "Policy for frontend access"
+desc "Our frontend policy will need to accept connections from anywhere, but only outbound connect to redis"
 run "cat $(relative frontend-policy.yaml)"
 run "./calicoctl create --filename=./frontend-policy.yaml"
 
-
-desc "But we can no longer access redis directly - only the frontend can"
+desc "We can no longer access redis directly - only the frontend can"
 run "docker exec netmodules_client_1 docker run -i  --rm redis:alpine redis-cli -h redis.marathon.mesos -p 6379 ping"
-
-desc "Remove policy to access redis and the frontend starts giving errors"
-run "./calicoctl delete policy"
 

@@ -6,7 +6,7 @@
   "instances": 1,
   "ipAddress": {
     "labels": {
-      "application": "backend",
+      "application": "database",
       "group": "production"
     },
     "discovery": {
