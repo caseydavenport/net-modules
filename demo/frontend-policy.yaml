@@ -1,7 +1,7 @@
 version: v1
 kind: policy
 metadata:
-  name: policy-1
+  name: frontend-policy
 spec:
   order: 50
   selector: application == "frontend"
