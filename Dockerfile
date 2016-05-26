@@ -9,7 +9,10 @@ RUN apt-get update -qq && apt-get install -qqy \
     ca-certificates \
     curl \
     lxc \
-    iptables
+    iptables \
+    python-dev python-pip
+
+RUN pip install --upgrade pip
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
@@ -28,13 +31,16 @@ RUN curl -LO https://github.com/mesosphere/mesos-dns/releases/download/v0.5.0/me
 ####################
 # Demo Files
 ####################
-WORKDIR /star
-ADD http://downloads.mesosphere.io/demo/star/v0.5.0/star-collect-v0.5.0-linux-x86_64 /star/
-RUN chmod +x star-collect-v0.5.0-linux-x86_64 
-ADD http://downloads.mesosphere.io/demo/star/v0.5.0/star-probe-v0.5.0-linux-x86_64 /star/
-RUN chmod +x star-probe-v0.5.0-linux-x86_64 
+# redis
+WORKDIR /root
+RUN curl -LO http://download.redis.io/releases/redis-3.2.0.tar.gz
+RUN tar -xvf /root/redis-3.2.0.tar.gz
+WORKDIR /root/redis-3.2.0
+RUN make && make install
 
-COPY ./demo/star-resources.json /star/star-resources.json               
+# flask
+RUN pip install flask redis
+ADD ./demo/app.py /root/
 
 #################
 # Init scripts

@@ -8,7 +8,7 @@ host = socket.gethostname()
 @app.route('/')
 def hello():
     try:
-        redis = Redis(host='redis.demos.svc.cluster.local', port=6379, socket_connect_timeout=1)
+        redis = Redis(host='redis.marathon.mesos', port=6379, socket_connect_timeout=1)
         redis.incr('hits')
     except:
         return "Failed to connect to redis"
