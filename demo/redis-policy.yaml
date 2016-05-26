@@ -10,5 +10,5 @@ spec:
     src_selector: application == 'frontend'
     action: allow
   outbound_rules:
-  - action: allow
+  - action: deny
 
