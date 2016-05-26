@@ -36,6 +36,7 @@ RUN apt-get -qy install \
   heimdal-clients                         \
   libsasl2-modules-gssapi-heimdal         \
   unzip                                   \
+  dnsutils                                \
   --no-install-recommends
 
 # Install the picojson headers
