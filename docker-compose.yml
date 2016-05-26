@@ -25,6 +25,8 @@ client:
     - etcd
   environment:
     - MESOS_MASTER=zk://fake_addr
+  volumes:
+    - /lib/modules:/lib/modules
   dns:
    - 192.168.255.254
 
@@ -46,6 +48,8 @@ slave:
     - MESOS_NETWORK_CNI_CONFIG_DIR=/cni/conf/
     - MESOS_ISOLATION=filesystem/linux,docker/runtime
     - MESOS_IMAGE_PROVIDERS=docker
+  volumes:
+    - /lib/modules:/lib/modules
   dns:
    - 192.168.255.254
 
