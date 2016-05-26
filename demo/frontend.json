@@ -2,7 +2,14 @@
   "id": "frontend",
   "instances": 3,
   "cmd": "python app.py",
+  "cpus": 0.1,
+  "mem": 128,
+  "uris": ["file:///root/app.py"],
   "ipAddress": {
+    "labels": {
+      "application": "frontend",
+      "group": "production"
+    },
     "discovery": {
       "ports": [{"number": 80, "name": "http", "protocol": "tcp"}]
     }
@@ -10,9 +17,6 @@
   "labels": {
     "HAPROXY_GROUP": "external",
     "HAPROXY_0_VHOST": "spring.acme.org"
-  },
-  "cpus": 0.1,
-  "mem": 128,
-  "uris": ["file:///root/app.py"]
+  }
 }
 

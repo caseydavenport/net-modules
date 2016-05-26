@@ -1,0 +1,14 @@
+version: v1
+kind: policy
+metadata:
+  name: policy-1
+spec:
+  order: 50
+  selector: application == "database" 
+  inbound_rules:
+  - protocol: tcp
+    src_selector: application == "frontend"
+    action: deny
+  outbound_rules:
+  - action: deny
+

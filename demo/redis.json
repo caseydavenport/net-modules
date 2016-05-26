@@ -5,6 +5,10 @@
   "mem": 128,
   "instances": 1,
   "ipAddress": {
+    "labels": {
+      "application": "backend",
+      "group": "production"
+    },
     "discovery": {
       "ports": [{"number": 6379, "name": "http", "protocol": "tcp"}]
     }
