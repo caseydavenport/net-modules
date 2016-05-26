@@ -3,7 +3,7 @@ zookeeper:
   hostname: zookeeper
 
 mesosmaster:
-  build: mesos-modules-dev/
+  image: mesosphere/mesos-master:0.28.1
   hostname: mesosmaster
   command: /mesos/build/bin/mesos-master.sh
   environment:
@@ -12,9 +12,6 @@ mesosmaster:
     - MESOS_LOG_DIR=/var/log
     - MESOS_ZK=zk://zookeeper:2181/mesos
     - MESOS_ROLES=public
-  volumes:
-    - /var/log/mesos:/var/log/mesos
-    - ./framework/:/framework
   ports:
     - "5050:5050"
   links:
@@ -38,9 +35,6 @@ slave:
     - mesosmaster
     - zookeeper
     - etcd
-  volumes:
-    - /var/log/mesos:/var/log/mesos
-    - ./framework:/framework
   environment:
     - MESOS_MASTER=zk://zookeeper:2181/mesos
     - MESOS_EXECUTOR_REGISTRATION_TIMEOUT=5mins
