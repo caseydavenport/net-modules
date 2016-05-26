@@ -2,8 +2,8 @@
 
 . $(dirname ${BASH_SOURCE})/util.sh
 
-export MARATHON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' netmodules_marathon_1)
-export ETCD_AUTHORITY=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' netmodules_etcd_1):2379
+export MARATHON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscni_marathon_1)
+export ETCD_AUTHORITY=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscni_etcd_1):2379
 
 desc "Our application uses a redis database. So let's launch one using marathon."
 run "cat $(relative redis.json)"

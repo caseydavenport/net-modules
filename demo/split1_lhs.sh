@@ -3,7 +3,7 @@
 . $(dirname ${BASH_SOURCE})/util.sh
 
 run "while true; do \\
-docker exec netmodules_client_1 curl  --connect-timeout 1 -s frontend.marathon.mesos && echo || echo \"(timeout)\"; \\
+docker exec mesoscni_client_1 curl  --connect-timeout 1 -s frontend.marathon.mesos && echo || echo \"(timeout)\"; \\
         sleep 1; \\
     done \\
     "
