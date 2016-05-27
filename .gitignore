@@ -29,5 +29,6 @@ missing
 .tags_sorted_by_file
 
 # Other deps
-calico-node-*.tar
+calico/
 docker-compose
+*.created

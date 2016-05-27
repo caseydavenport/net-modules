@@ -127,7 +127,7 @@ ADD ./init_scripts/etc/config/mesos-dns.json /etc/config/mesos-dns.json
 # Calico
 ######################
 COPY ./calico/ /calico/
-ADD https://github.com/projectcalico/calico-docker/releases/download/v0.19.0/calicoctl /usr/local/bin/calicoctl 
+RUN curl -L -o /usr/local/bin/calicoctl https://github.com/projectcalico/calico-docker/releases/download/v0.19.0/calicoctl
 RUN chmod +x /usr/local/bin/calicoctl
 
 
