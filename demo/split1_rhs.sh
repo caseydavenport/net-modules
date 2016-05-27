@@ -2,7 +2,7 @@
 
 . $(dirname ${BASH_SOURCE})/util.sh
 
-export SLAVE_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscnis_slave_1)
+export SLAVE_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscni_slave_1)
 export ETCD_AUTHORITY=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscni_etcd_1):2379
 export MARATHON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mesoscni_marathon_1)
 
@@ -24,5 +24,3 @@ run "./calicoctl create --filename=./frontend-policy.yaml"
 desc "We can no longer access redis directly - only the frontend can"
 run "docker exec mesoscni_client_1 docker run -i  --rm redis:alpine redis-cli -h database.marathon.mesos -p 6379 ping"
 
-desc "This is still true when we scale our frontend"
-run "curl -X PUT -H 'Content-Type: application/json' http://$MARATHON_IP:8080/v2/apps/frontend -d @$(relative frontend-3.json)"
