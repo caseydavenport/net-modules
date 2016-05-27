@@ -9,7 +9,7 @@ export MARATHON_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' 
 desc "I can access the frontend"
 run "echo '<----- see left pane'"
 desc "But I can also access redis"
-run "docker exec mesoscni_client_1 docker run --rm redis:alpine redis-cli -h redis.marathon.mesos -p 6379 SET hits 0"
+run "docker exec mesoscni_client_1 docker run --rm redis:alpine redis-cli -h database.marathon.mesos -p 6379 SET hits 0"
 
 desc "This is bad news, so lets add some policy"
 
@@ -22,7 +22,7 @@ run "cat $(relative frontend-policy.yaml)"
 run "./calicoctl create --filename=./frontend-policy.yaml"
 
 desc "We can no longer access redis directly - only the frontend can"
-run "docker exec mesoscni_client_1 docker run -i  --rm redis:alpine redis-cli -h redis.marathon.mesos -p 6379 ping"
+run "docker exec mesoscni_client_1 docker run -i  --rm redis:alpine redis-cli -h database.marathon.mesos -p 6379 ping"
 
 desc "This is still true when we scale our frontend"
 run "curl -X PUT -H 'Content-Type: application/json' http://$MARATHON_IP:8080/v2/apps/frontend -d @$(relative frontend-3.json)"

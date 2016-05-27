@@ -8,6 +8,8 @@ export ETCD_AUTHORITY=$(docker inspect --format '{{ .NetworkSettings.IPAddress }
 desc "Our application uses a redis database."
 desc "Lets define a marathon application for one"
 run "cat $(relative database.json)"
+
+desc "Lets launch it using Marathon"
 run "curl -X POST -H 'Content-Type: application/json' http://$MARATHON_IP:8080/v2/apps -d @$(relative database.json)"
 desc ""
 
