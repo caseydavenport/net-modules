@@ -11,6 +11,7 @@ calico-node: calico/calico-node-$(CALICO_NODE_VERSION).tar
 
 calico/calico-node-$(CALICO_NODE_VERSION).tar:
 	docker pull calico/node:$(CALICO_NODE_VERSION)
+	mkdir -p calico
 	docker save -o calico/calico-node-$(CALICO_NODE_VERSION).tar calico/node:$(CALICO_NODE_VERSION)
 
 images: calico-node docker-compose
