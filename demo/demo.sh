@@ -29,8 +29,6 @@ run "docker exec mesoscni_slave_1 nslookup frontend.marathon.mesos"
 desc "...and now the backend"
 run "docker exec mesoscni_slave_1 nslookup database.marathon.mesos"
 
-calicoctl profile test rule add inbound allow
-
 tmux new -d -s my-session-2 \
     "$(dirname ${BASH_SOURCE})/split1_lhs.sh" \; \
     split-window -h -d "sleep 10; $(dirname $BASH_SOURCE)/split1_rhs.sh" \; \
