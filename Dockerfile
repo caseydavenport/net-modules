@@ -121,7 +121,7 @@ ADD ./init_scripts/etc/service/docker/run /etc/service/docker/run
 ADD ./init_scripts/etc/service/calico/run /etc/service/calico/run
 ADD ./init_scripts/etc/service/mesos-dns/run /etc/service/mesos-dns/run
 ADD ./init_scripts/etc/config/mesos-dns.json /etc/config/mesos-dns.json
-
+ADD ./init_scripts/etc/service/flannel/run /etc/service/flannel/run
 
 ######################
 # Calico
@@ -132,3 +132,8 @@ RUN chmod +x /usr/local/bin/calicoctl
 
 
 ADD ./cni/ /cni/
+
+RUN curl -O -L https://github.com/coreos/flannel/releases/download/v0.5.5/flannel-0.5.5-linux-amd64.tar.gz
+RUN tar -xvf flannel-0.5.5-linux-amd64.tar.gz
+RUN chmod +x ./flannel-0.5.5/flanneld
+RUN mv flannel-0.5.5/flanneld /usr/local/bin

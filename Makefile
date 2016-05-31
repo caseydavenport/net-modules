@@ -30,6 +30,15 @@ clean:
 cluster: images
 	docker-compose -p mesoscni up -d
 	docker-compose -p mesoscni scale slave=2
+	docker-compose run client curl -L -X PUT \
+		http://etcd:2379/v2/keys/coreos.com/network/config \
+		-d value='{"Network":"10.0.0.0/8","Backend":{"Type":"vxlan"}}'
 
 test-cni:
-	docker exec mesoscni_slave_1 mesos-execute --containerizer=mesos --docker_image=busybox --name=cni --master=172.17.0.4:5050 --networks=calico-net-1 --command=ifconfig
+	docker exec mesoscni_slave_1 mesos-execute \
+		--containerizer=mesos \
+		--docker_image=busybox \
+		--name=test-1 \
+		--master=172.17.0.4:5050 \
+		--networks=test \
+		--command=ifconfig

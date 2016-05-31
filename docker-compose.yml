@@ -54,7 +54,7 @@ slave:
    - 192.168.255.254
 
 marathon:
-  image: djosborne/marathon:cni
+  image: djosborne/marathon:dev
   environment:
     - MARATHON_MASTER=zk://zookeeper:2181/mesos
     - MARATHON_ZK=zk://zookeeper:2181/marathon
@@ -69,4 +69,6 @@ etcd:
   image: quay.io/coreos/etcd:v2.3.5
   environment:
     - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
-    - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379,http://localhost:2379
+  ports:
+    - "2379:2379"
